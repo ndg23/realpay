@@ -1,8 +1,6 @@
-Voici un exemple de fichier README.md pour ce projet de serveur de paiement :
-
 # RealPay
 
-This is a simple payment server application built in Go. It provides an API for managing the lifecycle of payment transactions, including initialization, confirmation, rejection, and status retrieval.
+    This is a simple payment server application built in Go. It provides an API for managing the lifecycle of payment transactions, including initialization, confirmation, rejection, and status retrieval.
 
 ## Features
 
@@ -23,12 +21,12 @@ This is a simple payment server application built in Go. It provides an API for 
 
 1. Clone the repository:
 ```
-git clone https://github.com/your-username/payment-server.git
+git clone https://github.com/ndg23/realpay.git
 ```
 
 2. Change to the project directory:
 ```
-cd payment-server
+cd realpay
 ```
 
 3. Install the dependencies:
@@ -40,12 +38,12 @@ go get -d ./...
 
 1. Build the application:
 ```
-go build -o payment-server cmd/main.go
+go build -o realpay cmd/main.go
 ```
 
 2. Run the server:
 ```
-./payment-server
+./realpay
 ```
 
 The server will start listening on `http://localhost:8080`.
