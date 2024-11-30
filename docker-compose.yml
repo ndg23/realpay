@@ -1,0 +1,81 @@
+
+services:
+  # RealPay Go application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      - DB_URL=${DB_URL}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - PORT=${PORT}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./migrations:/migrations
+      - ./logs:/logs
+    # environment_file:
+    #   - .env
+    networks:
+      - realpay_network_bis
+
+  # PostgreSQL database
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=realpaydb
+      - POSTGRES_USER=realpay
+      - POSTGRES_PASSWORD=realpay_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - realpay_network_bis
+
+  # Redis for caching and session management
+  redis:
+    image: redis:6-alpine
+    volumes:
+      - redis_data:/data
+    networks:
+      - realpay_network_bis
+
+  # Prometheus for monitoring
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - realpay_network_bis
+
+  # Grafana for visualization
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - realpay_network_bis
+
+volumes:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+networks:
+  realpay_network_bis:
+    driver: bridge
